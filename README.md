@@ -1,7 +1,20 @@
 # Tauri + React
 
-This template should help get you started developing with Tauri and React in Vite.
+This application is created as a Tauri based GUI app to show info about current wifi networks available.
 
-## Recommended IDE Setup
+## Important note
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Should work in Linux and MacOS systems, not Windows
+
+## How to run this app:
+
+To install dependencies use:
+```bash
+pnpm install
+```
+
+To run desktop app:
+
+```bash
+pnpm tauri dev
+```
