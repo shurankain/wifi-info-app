@@ -4,7 +4,7 @@ This application is created as a Tauri based GUI app to show info about current 
 
 ## Important note
 
-Should work in Linux and MacOS systems, not Windows
+Should work on new MacOS systems, not Windows or Linux
 
 ## How to run this app:
 
