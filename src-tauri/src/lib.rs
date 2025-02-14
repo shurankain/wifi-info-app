@@ -1,5 +1,6 @@
 use log::info;
 use std::process::Command;
+use regex::Regex;
 
 #[tauri::command]
 async fn get_wifi_data() -> Result<String, String> {
@@ -9,14 +10,26 @@ async fn get_wifi_data() -> Result<String, String> {
         .output();
 
     let res = match output {
-        Ok(output) if output.status.success() => std::str::from_utf8(&output.stdout)
-            .unwrap_or("Invalid UTF-8 output")
-            .to_string(),
-        Ok(output) => output.status.to_string(),
-        Err(e) => e.to_string(),
+        Ok(output) if output.status.success() => Ok(
+            String::from_utf8(output.stdout).unwrap_or_else(|_| "Invalid UTF-8 output".to_string())
+        ),
+        Ok(output) => Err(format!("Command failed with status: {}", output.status)),
+        Err(e) => Err(format!("Failed to execute command: {}", e)),
     };
 
-    Ok(res)
+    let trimmed = trim_data(res?);
+
+    Ok(trimmed)
+}
+
+pub fn trim_data(input_data: String) -> String {
+    let re = Regex::new(r"(?s)Current Network Information:\s*(.*?)\s*Other Local Wi-Fi Networks:")
+        .ok().unwrap(); 
+
+    re.captures(&input_data)
+        .and_then(|caps| caps.get(1))
+        .map(|m| m.as_str().trim().to_string())
+        .unwrap() // Возвращаем пустую строку, если нет совпадений
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
