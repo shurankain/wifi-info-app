@@ -1,5 +1,5 @@
-use std::process::Command;
 use log::info;
+use std::process::Command;
 
 #[tauri::command]
 async fn get_wifi_data() -> Result<String, String> {
@@ -9,15 +9,11 @@ async fn get_wifi_data() -> Result<String, String> {
         .output();
 
     let res = match output {
-        Ok(output) if output.status.success() => {
-            std::str::from_utf8(&output.stdout).unwrap_or("Invalid UTF-8 output").to_string()
-        }
-        Ok(output) => {
-            output.status.to_string()
-        }
-        Err(e) => {
-            e.to_string()
-        }
+        Ok(output) if output.status.success() => std::str::from_utf8(&output.stdout)
+            .unwrap_or("Invalid UTF-8 output")
+            .to_string(),
+        Ok(output) => output.status.to_string(),
+        Err(e) => e.to_string(),
     };
 
     Ok(res)
