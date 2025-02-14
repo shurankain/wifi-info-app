@@ -4,7 +4,6 @@ import "./App.css";
 import { info } from "@tauri-apps/plugin-log";
 
 function App() {
-
     const [wifiData, setWifiData] = useState("Loading...");
 
     useEffect(() => {
