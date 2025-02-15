@@ -21,9 +21,9 @@ function App() {
 
     return (
         <main className="container">
-            {wifiData && <h1>{wifiData.current.name}</h1>}
-            {wifiData && wifiData.current && wifiData.current.details.map(line => (
-                <p>{line}</p>
+            {wifiData && <h1>{wifiData[0].name}</h1>}
+            {wifiData && wifiData.length > 0 && wifiData[0].details.map((line, index) => (
+                <p key={index}>{line}</p>
             ))}
         </main>
     );

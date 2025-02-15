@@ -9,14 +9,8 @@ struct Network {
     details: Vec<String>,
 }
 
-#[derive(Serialize)]
-struct AllNetworks {
-    current: Network,
-    others: Vec<Network>,
-}
-
 #[tauri::command]
-async fn get_wifi_data() -> Result<AllNetworks, String> {
+async fn get_wifi_data() -> Result<Vec<Network>, String> {
     info!("Getting wifi data");
     let output = Command::new("system_profiler")
         .arg("SPAirPortDataType")
@@ -39,12 +33,7 @@ async fn get_wifi_data() -> Result<AllNetworks, String> {
         details: splitted.iter().skip(1).cloned().collect(),
     };
 
-    let all_networks: AllNetworks = AllNetworks {
-        current: current_network,
-        others: Vec::new(),
-    };
-
-    Ok(all_networks)
+    Ok(vec![current_network])
 }
 
 pub fn trim_data(input_data: String) -> String {
