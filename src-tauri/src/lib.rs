@@ -1,9 +1,22 @@
 use log::info;
 use regex::Regex;
+use serde::Serialize;
 use std::process::Command;
 
+#[derive(Serialize)]
+struct Network {
+    name: String,
+    details: Vec<String>,
+}
+
+#[derive(Serialize)]
+struct AllNetworks {
+    current: Network,
+    others: Vec<Network>,
+}
+
 #[tauri::command]
-async fn get_wifi_data() -> Result<String, String> {
+async fn get_wifi_data() -> Result<AllNetworks, String> {
     info!("Getting wifi data");
     let output = Command::new("system_profiler")
         .arg("SPAirPortDataType")
@@ -19,7 +32,19 @@ async fn get_wifi_data() -> Result<String, String> {
 
     let trimmed = trim_data(res?);
 
-    Ok(trimmed)
+    let splitted: Vec<String> = trimmed.lines().map(|s| s.to_string()).collect();
+
+    let current_network: Network = Network {
+        name: splitted.first().cloned().unwrap_or_default(),
+        details: splitted.iter().skip(1).cloned().collect(),
+    };
+
+    let all_networks: AllNetworks = AllNetworks {
+        current: current_network,
+        others: Vec::new(),
+    };
+
+    Ok(all_networks)
 }
 
 pub fn trim_data(input_data: String) -> String {

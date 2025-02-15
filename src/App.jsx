@@ -4,7 +4,7 @@ import "./App.css";
 import { info } from "@tauri-apps/plugin-log";
 
 function App() {
-    const [wifiData, setWifiData] = useState("Loading...");
+    const [wifiData, setWifiData] = useState(null);
 
     useEffect(() => {
         async function loadWifiData() {
@@ -21,7 +21,10 @@ function App() {
 
     return (
         <main className="container">
-            <h1>{wifiData}</h1>
+            {wifiData && <h1>{wifiData.current.name}</h1>}
+            {wifiData && wifiData.current && wifiData.current.details.map(line => (
+                <p>{line}</p>
+            ))}
         </main>
     );
 }
