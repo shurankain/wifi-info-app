@@ -1,6 +1,6 @@
 use log::info;
-use std::process::Command;
 use regex::Regex;
+use std::process::Command;
 
 #[tauri::command]
 async fn get_wifi_data() -> Result<String, String> {
@@ -9,13 +9,13 @@ async fn get_wifi_data() -> Result<String, String> {
         .arg("SPAirPortDataType")
         .output();
 
-    let res = match output {
-        Ok(output) if output.status.success() => Ok(
-            String::from_utf8(output.stdout).unwrap_or_else(|_| "Invalid UTF-8 output".to_string())
-        ),
-        Ok(output) => Err(format!("Command failed with status: {}", output.status)),
-        Err(e) => Err(format!("Failed to execute command: {}", e)),
-    };
+    let res =
+        match output {
+            Ok(output) if output.status.success() => Ok(String::from_utf8(output.stdout)
+                .unwrap_or_else(|_| "Invalid UTF-8 output".to_string())),
+            Ok(output) => Err(format!("Command failed with status: {}", output.status)),
+            Err(e) => Err(format!("Failed to execute command: {}", e)),
+        };
 
     let trimmed = trim_data(res?);
 
@@ -24,7 +24,8 @@ async fn get_wifi_data() -> Result<String, String> {
 
 pub fn trim_data(input_data: String) -> String {
     let re = Regex::new(r"(?s)Current Network Information:\s*(.*?)\s*Other Local Wi-Fi Networks:")
-        .ok().unwrap(); 
+        .ok()
+        .unwrap();
 
     re.captures(&input_data)
         .and_then(|caps| caps.get(1))
