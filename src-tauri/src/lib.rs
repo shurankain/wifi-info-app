@@ -44,7 +44,7 @@ async fn get_wifi_data() -> Result<Vec<Network>, String> {
         if let Some(name) = other_networks_lines.get(i) {
             let network = Network {
                 name: name.to_string(),
-                details: Vec::new(),
+                details: get_network_details(i, other_networks_lines.clone()),
                 is_current: false,
             };
 
@@ -56,6 +56,15 @@ async fn get_wifi_data() -> Result<Vec<Network>, String> {
     all_networks_vec.extend(other_networks_vec);
 
     Ok(all_networks_vec)
+}
+
+pub fn get_network_details(start_index: usize, lines_of_data: Vec<&str>) -> Vec<String> {
+    lines_of_data
+        .iter()
+        .skip(start_index)
+        .take(5)
+        .map(|s| s.to_string())
+        .collect()
 }
 
 pub fn trim_current_network_data(input_data: String) -> String {
