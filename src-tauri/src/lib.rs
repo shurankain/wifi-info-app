@@ -7,6 +7,7 @@ use std::process::Command;
 struct Network {
     name: String,
     details: Vec<String>,
+    is_current: bool,
 }
 
 #[tauri::command]
@@ -24,27 +25,58 @@ async fn get_wifi_data() -> Result<Vec<Network>, String> {
             Err(e) => Err(format!("Failed to execute command: {}", e)),
         };
 
-    let trimmed = trim_data(res?);
+    let current = trim_current_network_data(res.clone()?);
+    let others = trim_other_networks_data(res.clone()?);
 
-    let splitted: Vec<String> = trimmed.lines().map(|s| s.to_string()).collect();
+    let splitted: Vec<String> = current.lines().map(|s| s.to_string()).collect();
 
     let current_network: Network = Network {
         name: splitted.first().cloned().unwrap_or_default(),
         details: splitted.iter().skip(1).cloned().collect(),
+        is_current: true,
     };
 
-    let current_clone = current_network.clone();
-    let current_clone2 = current_network.clone();
+    let other_networks_lines: Vec<&str> = others.lines().collect();
 
-    Ok(vec![current_network, current_clone, current_clone2])
+    let mut other_networks_vec: Vec<Network> = Vec::new();
+
+    for i in (0..other_networks_lines.len()).step_by(6) {
+        if let Some(name) = other_networks_lines.get(i) {
+            let network = Network {
+                name: name.to_string(),
+                details: Vec::new(),
+                is_current: false,
+            };
+
+            other_networks_vec.push(network);
+        }
+    }
+
+    let mut all_networks_vec = vec![current_network];
+    all_networks_vec.extend(other_networks_vec);
+
+    Ok(all_networks_vec)
 }
 
-pub fn trim_data(input_data: String) -> String {
-    let re = Regex::new(r"(?s)Current Network Information:\s*(.*?)\s*Other Local Wi-Fi Networks:")
+pub fn trim_current_network_data(input_data: String) -> String {
+    let regx =
+        Regex::new(r"(?s)Current Network Information:\s*(.*?)\s*Other Local Wi-Fi Networks:")
+            .ok()
+            .unwrap();
+
+    trim_data(input_data, regx)
+}
+
+pub fn trim_other_networks_data(input_data: String) -> String {
+    let regx = Regex::new(r"(?s)Other Local Wi-Fi Networks:\s*(.*?)\s*awdl0")
         .ok()
         .unwrap();
 
-    re.captures(&input_data)
+    trim_data(input_data, regx)
+}
+
+pub fn trim_data(input_data: String, regx: Regex) -> String {
+    regx.captures(&input_data)
         .and_then(|caps| caps.get(1))
         .map(|m| m.as_str().trim().to_string())
         .unwrap() // Возвращаем пустую строку, если нет совпадений
