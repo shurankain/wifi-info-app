@@ -21,10 +21,31 @@ function App() {
 
     return (
         <main className="container">
-            {wifiData && <h1>{wifiData[0].name}</h1>}
-            {wifiData && wifiData.length > 0 && wifiData[0].details.map((line, index) => (
-                <p key={index}>{line}</p>
-            ))}
+            {/* Prints current network data, if awailable */}
+            {wifiData && wifiData.length > 0 && (
+                <>
+                    <h1>Current network: </h1>
+                    <h2>{wifiData[0].name}</h2>
+                    {wifiData[0].details.map((line, index) => (
+                        <p key={index}>{line}</p>
+                    ))}
+                </>
+            )}
+
+            {/* Prints other networks data, if awailable */}
+            {wifiData && wifiData.length > 1 && (
+                <>
+                    <h1>Other available networks:</h1>
+                    {wifiData.slice(1).map((networkData, index) => (
+                        <div key={index}>
+                            <h2>{networkData.name}</h2>
+                            {networkData.details.map((line, idx) => (
+                                <p key={idx}>{line}</p>
+                            ))}
+                        </div>
+                    ))}
+                </>
+            )}
         </main>
     );
 }

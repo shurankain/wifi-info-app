@@ -3,7 +3,7 @@ use regex::Regex;
 use serde::Serialize;
 use std::process::Command;
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 struct Network {
     name: String,
     details: Vec<String>,
@@ -33,7 +33,10 @@ async fn get_wifi_data() -> Result<Vec<Network>, String> {
         details: splitted.iter().skip(1).cloned().collect(),
     };
 
-    Ok(vec![current_network])
+    let current_clone = current_network.clone();
+    let current_clone2 = current_network.clone();
+
+    Ok(vec![current_network, current_clone, current_clone2])
 }
 
 pub fn trim_data(input_data: String) -> String {
