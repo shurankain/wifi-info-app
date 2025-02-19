@@ -37,7 +37,7 @@ function App() {
                 </>
             ) : (
                 <p>{loading ? "Loading data..." : "No data loaded"}</p>
-            )}            
+            )}
         </div>
     );
 }

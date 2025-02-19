@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { info } from "@tauri-apps/plugin-log";
 
 function WifiList({ wifiData }) {
     const [expandedIndex, setExpandedIndex] = useState(null);
@@ -12,8 +11,8 @@ function WifiList({ wifiData }) {
         <div>
             {wifiData.map((network, index) => (
                 <div key={index}>
-                    <h2 
-                        onClick={() => toggleDetails(index)} 
+                    <h2
+                        onClick={() => toggleDetails(index)}
                         style={{ cursor: "pointer", color: network.is_current ? "green" : "black", textDecoration: "underline" }}
                     >
                         {network.name}
