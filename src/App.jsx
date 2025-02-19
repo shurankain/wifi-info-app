@@ -5,12 +5,7 @@ import WifiList from "./WifiList";
 import { info } from "@tauri-apps/plugin-log";
 
 function App() {
-    const wD = [
-        { name: "Network 1", details: ["Signal: -45 dBm", "Channel: 11", "Security: WPA2"] },
-        { name: "Network 2", details: ["Signal: -50 dBm", "Channel: 6", "Security: WPA2"] },
-    ];
-    
-    const [wifiData, setWifiData] = useState(wD);
+    const [wifiData, setWifiData] = useState(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
