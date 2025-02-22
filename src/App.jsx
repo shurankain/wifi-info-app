@@ -26,9 +26,11 @@ function App() {
 
     return (
         <div className="container">
-            <button onClick={loadWifiData} disabled={loading}>
-                "{loading ? "Updating..." : "Update WiFi Data"}"
-            </button>
+            {wifiData && (
+                <button onClick={loadWifiData} disabled={loading}>
+                    {loading ? "Updating..." : "Update WiFi Data"}
+                </button>
+            )}
 
             {wifiData ? (
                 <>
