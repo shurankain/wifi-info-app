@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
-import WifiList from "./WifiList";
+import WifiList from "./components/WifiList/WifiList";
 import { info } from "@tauri-apps/plugin-log";
 
 function App() {
