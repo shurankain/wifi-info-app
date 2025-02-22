@@ -28,10 +28,16 @@ function App() {
         <div className="container">
             {wifiData && (
                 <>
-                    <h1>Available Wi-Fi Networks</h1>
-                    <button onClick={loadWifiData} disabled={loading}>
-                        {loading ? "Updating..." : "Update WiFi Data"}
-                    </button>
+                    <div className=".header">
+                        <h1>Available Wi-Fi Networks</h1>
+                        <button
+                            className="updateButton"
+                            onClick={loadWifiData}
+                            disabled={loading}>
+                            {loading ? "Updating..." : "Update WiFi Data"}
+                        </button>
+                    </div>
+
                 </>
             )}
 
