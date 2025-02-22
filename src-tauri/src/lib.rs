@@ -30,8 +30,11 @@ async fn get_wifi_data() -> Result<Vec<Network>, String> {
 
     let splitted: Vec<String> = current.lines().map(|s| s.to_string()).collect();
 
+    let mut network_name = splitted.first().cloned().unwrap_or_default();
+    network_name.pop();
+
     let current_network: Network = Network {
-        name: splitted.first().cloned().unwrap_or_default(),
+        name: network_name,
         details: splitted.iter().skip(1).cloned().collect(),
         is_current: true,
     };
@@ -42,13 +45,16 @@ async fn get_wifi_data() -> Result<Vec<Network>, String> {
 
     for i in (0..other_networks_lines.len()).step_by(6) {
         if let Some(name) = other_networks_lines.get(i) {
-            let network = Network {
-                name: name.to_string(),
-                details: get_network_details(i, other_networks_lines.clone()),
-                is_current: false,
-            };
-
-            other_networks_vec.push(network);
+            let mut network_name = name.to_string();
+            if network_name.ends_with(':') {
+                network_name.pop();
+                let network = Network {
+                    name: network_name,
+                    details: get_network_details(i, other_networks_lines.clone()),
+                    is_current: false,
+                };
+                other_networks_vec.push(network);
+            }
         }
     }
 
