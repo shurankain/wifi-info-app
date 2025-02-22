@@ -27,16 +27,16 @@ function App() {
     return (
         <div className="container">
             {wifiData && (
-                <button onClick={loadWifiData} disabled={loading}>
-                    {loading ? "Updating..." : "Update WiFi Data"}
-                </button>
+                <>
+                    <h1>Available Wi-Fi Networks</h1>
+                    <button onClick={loadWifiData} disabled={loading}>
+                        {loading ? "Updating..." : "Update WiFi Data"}
+                    </button>
+                </>
             )}
 
             {wifiData ? (
-                <>
-                    <h1>Available Wi-Fi Networks</h1>
-                    <WifiList wifiData={wifiData} />
-                </>
+                <WifiList wifiData={wifiData} />
             ) : (
                 <p>{loading ? "Loading data..." : "No data loaded"}</p>
             )}

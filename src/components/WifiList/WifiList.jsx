@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./WifiList.css";
 
 function WifiList({ wifiData }) {
     const [expandedIndex, setExpandedIndex] = useState(null);
@@ -10,10 +11,18 @@ function WifiList({ wifiData }) {
     return (
         <div>
             {wifiData.map((network, index) => (
-                <div key={index}>
+                <div
+                    key={index}
+                    className="singleNetworkInfo"
+                    style={{
+                        border: "2px solid black",
+                    }}>
                     <h2
                         onClick={() => toggleDetails(index)}
-                        style={{ cursor: "pointer", color: network.is_current ? "green" : "black", textDecoration: "underline" }}
+                        style={{
+                            cursor: "pointer",
+                            color: network.is_current ? "green" : "black",
+                        }}
                     >
                         {network.name}
                     </h2>
