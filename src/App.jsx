@@ -5,49 +5,49 @@ import WifiList from "./components/WifiList/WifiList";
 import { info } from "@tauri-apps/plugin-log";
 
 function App() {
-    const [wifiData, setWifiData] = useState(null);
-    const [loading, setLoading] = useState(false);
+  const [wifiData, setWifiData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        loadWifiData();
-    }, []);
+  useEffect(() => {
+    loadWifiData();
+  }, []);
 
-    async function loadWifiData() {
-        setLoading(true);
-        try {
-            let loadingResult = await invoke("get_wifi_data");
-            info("Wifi data loaded: " + loadingResult);
-            setWifiData(loadingResult);
-            setLoading(false);
-        } catch (error) {
-            setWifiData("error during data retrieval");
-        }
+  async function loadWifiData() {
+    setLoading(true);
+    try {
+      let loadingResult = await invoke("get_wifi_data");
+      info("Wifi data loaded: " + loadingResult);
+      setWifiData(loadingResult);
+      setLoading(false);
+    } catch (error) {
+      setWifiData("error during data retrieval");
     }
+  }
 
-    return (
-        <div className="container">
-            {wifiData && (
-                <>
-                    <div className=".header">
-                        <h1>Available Wi-Fi Networks</h1>
-                        <button
-                            className="updateButton"
-                            onClick={loadWifiData}
-                            disabled={loading}>
-                            {loading ? "Updating..." : "Update WiFi Data"}
-                        </button>
-                    </div>
+  return (
+    <div className="container">
+      {wifiData && (
+        <>
+          <div className=".header">
+            <h1>Available Wi-Fi Networks</h1>
+            <button
+              className="updateButton"
+              onClick={loadWifiData}
+              disabled={loading}>
+              {loading ? "Updating..." : "Update WiFi Data"}
+            </button>
+          </div>
 
-                </>
-            )}
+        </>
+      )}
 
-            {wifiData ? (
-                <WifiList wifiData={wifiData} />
-            ) : (
-                <p>{loading ? "Loading data..." : "No data loaded"}</p>
-            )}
-        </div>
-    );
+      {wifiData ? (
+        <WifiList wifiData={wifiData} />
+      ) : (
+        <p>{loading ? "Loading data..." : "No data loaded"}</p>
+      )}
+    </div>
+  );
 }
 
 export default App;
